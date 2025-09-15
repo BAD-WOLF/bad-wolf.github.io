@@ -1,162 +1,255 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-    content="Currículo profissional de Matheus Vieira, desenvolvedor de aplicativos web e chatBots, com experiência em várias tecnologias de programação.">
-  <meta name="keywords"
-    content="Matheus Vieira, Desenvolvedor Web, Desenvolvedor de chatBots, PHP, HTML, CSS, Symfony, Laravel, Flask, MySQL, Docker, Currículo">
-  <meta name="author" content="Matheus Vieira">
-  <title>Currículo - Matheus Vieira</title>
-  <link rel="icon" href="https://img.icons8.com/fluency/48/000000/resume.png" type="image/png">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Matheus Vieira — Desenvolvedor</title>
+  <meta name="author" content="Matheus Vieira" />
+  <meta name="description" content="Currículo de Matheus Vieira — desenvolvedor web, chatbots e automação. Disponível para trabalho remoto." />
 
-  <!-- Link para styles -->
-  <link href="styles/style.css" rel="stylesheet">
-  <!-- Link para uma fonte moderna -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <!-- Link para ícones -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+  <!-- Fonts (mantive as fontes originais) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet"/>
 
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --muted:#94a3b8;
+      --accent:#06b6d4;
+      --text:#e6eef6;
+      font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      background: linear-gradient(180deg,#071024 0%, #071a2b 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:24px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .container{
+      width:100%;
+      max-width:980px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      border-radius:12px;
+      padding:28px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:28px;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      padding:18px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.02);
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-height:220px;
+    }
+
+    .photo{
+      width:100%;
+      height:180px;
+      border-radius:8px;
+      background:linear-gradient(135deg,var(--accent),#7c3aed);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:20px;
+      color:#04121a;
+    }
+
+    .contact small{color:var(--muted); display:block; margin-bottom:6px;}
+    .contact a{
+      color:var(--text);
+      text-decoration:none;
+      display:block;
+      word-break:break-all;
+    }
+
+    .section-title{
+      font-size:12px;
+      text-transform:uppercase;
+      color:var(--muted);
+      letter-spacing:0.12em;
+      margin-bottom:6px;
+    }
+
+    .skill-list, .meta-list{display:flex;flex-direction:column;gap:8px;}
+    .skill-item{font-size:14px;}
+
+    /* Main */
+    .main{
+      padding:18px;
+      border-radius:10px;
+      background:transparent;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    header h1{margin:0;font-size:22px;letter-spacing:0.02em;}
+    header p.role{margin:6px 0 0;color:var(--muted);}
+
+    .summary{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      padding:12px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,0.02);
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    .experience, .skills, .education{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .job{
+      padding:12px;
+      border-radius:8px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.00));
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .job h4{margin:0;font-size:16px;}
+    .job .meta{font-size:13px;color:var(--muted); margin-top:4px;}
+    .job ul{margin:8px 0 0 18px;color:var(--text);}
+
+    footer{padding-top:6px;color:var(--muted);font-size:13px;}
+
+    /* Responsive */
+    @media (max-width:880px){
+      .container{grid-template-columns:1fr; padding:18px;}
+      .sidebar{order:2;}
+    }
+  </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>MATHEUS VIEIRA</h1>
-    <div class="info">
-      <p class="contact-item">
-        <img src="https://img.icons8.com/material-outlined/24/000000/user.png" alt="Nome" /> Matheus Vieira Lima Da
-        Silva
-      </p>
-      <p class="contact-item">
-        <img src="https://img.icons8.com/material-outlined/24/000000/calendar.png" alt="Data de Nascimento" />
-        08/01/2005
-      </p>
-      <p class="contact-item">
-        <img src="https://img.icons8.com/material-outlined/24/000000/place-marker.png" alt="Localização" /> Salvador -
-        BA / remoto
-      </p>
-      <p class="contact-item">
-        <img src="https://img.icons8.com/material-outlined/24/000000/phone.png" alt="Telefone"/>
-        <img src="https://img.icons8.com/material-outlined/24/000000/whatsapp.png" alt="WhatsApp"/>
-        <a href="https://wa.me//5571984056597">+55 71 98405-6597</a>
-      </p>
-      <p class="contact-item">
-        <img src="https://img.icons8.com/material-outlined/24/000000/email.png" alt="Email" />
-        <a href="mailto:matheusviaira160@gmail.com">matheusviaira160@gmail.com</a>
-      </p>
-    </div>
+  <main class="container" role="main" aria-labelledby="nome">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Informações pessoais">
+      <div class="photo" aria-hidden="true">MV</div>
 
-    <div class="intro">
-      <p>Desenvolvedor apaixonado por tecnologia e inovação, com experiência em desenvolvimento de aplicativos web e
-        chatBots. Buscando constantemente expandir minhas habilidades e conhecimentos em tecnologias emergentes.</p>
-    </div>
-
-    <div class="section">
-      <h2>Experiência Profissional</h2>
-      <p><strong>Freelancer - Desenvolvedor de apps web e chatBots - 01/2022 - Atual</strong></p>
-      <p>Atualmente desenvolvendo aplicações web, chatBots, suporte em comunidades Telegram e Discord. Buscando novos
-        horizontes no desenvolvimento de aplicativos mobile com React Native.</p>
-      <p><em>VENHO ATRAVÉS DESSA OPORTUNIDADE CRESCER JUNTAMENTE COM A EMPRESA.</em></p>
-    </div>
-
-    <div class="section">
-      <h2>Habilidades</h2>
-      <div class="skills">
-        <div class="skill-item">
-          <h3>Domina</h3>
-          <ul>
-            <li>HTML/CSS <p class="skill-desc">Criação de interfaces responsivas com boas práticas de design.</p>
-            </li>
-            <li>PHP (POO) <p class="skill-desc">Desenvolvimento de sistemas escaláveis com programação orientada a
-                objetos.</p>
-            </li>
-            <li>Git CLI / Git Flow <p class="skill-desc">Gerenciamento de código com controle de versão eficiente.</p>
-            </li>
-          </ul>
+      <div>
+        <div class="section-title">Contato</div>
+        <div class="contact">
+          <small>Localização</small>
+          <div>Guarulhos - SP (Disponível para remoto)</div>
+          <small style="margin-top:8px;">Telefone</small>
+          <a href="tel:+5571984056597">+55 71 98405-6597</a>
+          <small style="margin-top:8px;">Email</small>
+          <a href="mailto:matheusvieira160@gmail.com">matheusvieira160@gmail.com</a>
         </div>
-
-        <div class="skill-item">
-          <h3>MVC, CRUD, API</h3>
-          <ul>
-            <li>Symfony (Doctrine) <p class="skill-desc">Manipulação avançada de banco de dados com ORM.</p>
-            </li>
-            <li>Laravel (Eloquent) <p class="skill-desc">Desenvolvimento rápido com mapeamento objeto-relacional.</p>
-            </li>
-            <li>Flask (SQLAlchemy) <p class="skill-desc">APIs integradas com banco de dados via SQLAlchemy.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="skill-item">
-          <h3>Dia a dia</h3>
-          <ul>
-            <li>MySQL/MariaDB <p class="skill-desc">Consultas e modelagem de banco de dados.</p>
-            </li>
-            <li>Linux (Ubuntu) <p class="skill-desc">Administração de ambientes de desenvolvimento.</p>
-            </li>
-            <li>Server (Nginx) <p class="skill-desc">Configuração de servidores para aplicações web.</p>
-            </li>
-            <li>Docker (docker-compose) <p class="skill-desc">Criação de ambientes consistentes com Docker.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="skill-item">
-          <h3>No-code/Low-code</h3>
-          <ul>
-            <li>Bubble.io <p class="skill-desc">Desenvolvimento ágil com plataformas no-code.</p>
-            </li>
-            <li>FlutterFlow <p class="skill-desc">Criação de protótipos e aplicativos rápidos.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="skill-item">
-          <h3>Front</h3>
-          <ul>
-            <li>Symfony UX <p class="skill-desc">Interações dinâmicas na interface com Symfony UX.</p>
-            </li>
-            <li>Bootstrap <p class="skill-desc">Desenvolvimento de interfaces responsivas.</p>
-            </li>
-            <li>JavaScript (jQuery, Fetch) <p class="skill-desc">Manipulação assíncrona e interação dinâmica.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="skill-item">
-          <h3>Automação (JS)</h3>
-          <ul>
-            <li>Chat-Bot (Venom-bot, telegraf) <p class="skill-desc">Automação de conversas no WhatsApp e Telegram.</p>
-            </li>
-            <li>Web Browser (Puppeteer) <p class="skill-desc">Automação de tarefas no navegador.</p>
-            </li>
-            <li>Desktop Automation (RobotJS) <p class="skill-desc">Automação de processos no desktop.</p>
-            </li>
-          </ul>
-        </div>
-
-        <div class="skill-item">
-          <h3>Básico</h3>
-          <ul>
-            <li>C/C++ (algoritmo/lógica) <p class="skill-desc">Conhecimento básico de algoritmos e estruturas de dados.</p>
-            </li>
-            <li>C# / .NET <p class="skill-desc">Noções básicas de desenvolvimento com C# e a plataforma .NET.</p>
-            </li>
-            <li>C# (MonoBehaviour) <p class="skill-desc">Criação de scripts simples e interação com objetos em Unity.</p>
-            </li>
-          </ul>
-        </div>
-
       </div>
-    </div>
 
-    <div class="section languages">
-      <h2>Idiomas</h2>
-      <p>Conhecimento intermediário em inglês</p>
-    </div>
-  </div>
+      <div>
+        <div class="section-title">Idiomas</div>
+        <div class="meta-list">
+          <div class="skill-item">Português — Nativo</div>
+          <div class="skill-item">Inglês — Intermediário (Leitura e Escrita)</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Disponibilidade</div>
+        <div class="skill-item">Remoto / Disponível para presencial</div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <section class="main" aria-label="Currículo principal">
+      <header id="nome">
+        <h1>Matheus Vieira Lima Da Silva</h1>
+        <p class="role">Desenvolvedor Web • Chatbots • Automação</p>
+      </header>
+
+      <div class="summary" aria-label="Resumo profissional">
+        <strong>Resumo profissional</strong>
+        <p style="margin:8px 0 0;">
+          Desenvolvedor apaixonado com experiência em aplicações web, chatbots e automação. Atuou com front-end, back-end e DevOps, criando soluções escaláveis, integrações com APIs RESTful e automações para processos. Disponível para atuar em equipes dinâmicas e projetos remotos ou presenciais. <!-- fonte: PDF -->
+        </p>
+      </div>
+
+      <section class="experience" aria-label="Experiência profissional">
+        <div class="section-title">Experiência</div>
+
+        <div class="job">
+          <h4>Freelancer — Web Applications & Chatbot Developer</h4>
+          <div class="meta">01/2022 — Presente</div>
+          <ul>
+            <li>Desenvolvimento de soluções para aplicações web, automação de processos e chatbots (Venom-bot, Telegraf e similares).</li>
+            <li>Interfaces responsivas usando Bootstrap, SCSS e Symfony UX / Twig.</li>
+            <li>Integração de APIs RESTful com PHP (OOP), Flask e Symfony.</li>
+            <li>Configuração de servidores com Nginx, Linux (Ubuntu) e Docker (docker-compose).</li>
+            <li>Modelagem e implementação de bancos de dados MySQL/MariaDB (Doctrine/SQLAlchemy quando aplicável).</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="skills" aria-label="Habilidades técnicas">
+        <div class="section-title">Habilidades técnicas</div>
+
+        <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px;">
+          <div class="job">
+            <strong>Front-End</strong>
+            <div class="meta">HTML/CSS, Bootstrap, Symfony UX + Twig, JavaScript (jQuery, Fetch)</div>
+          </div>
+
+          <div class="job">
+            <strong>Back-End</strong>
+            <div class="meta">PHP (OOP), Symfony, Doctrine, Flask, SQLAlchemy, MySQL/MariaDB</div>
+          </div>
+
+          <div class="job">
+            <strong>DevOps & Infra</strong>
+            <div class="meta">Docker, docker-compose, Nginx, Linux (Ubuntu)</div>
+          </div>
+
+          <div class="job">
+            <strong>Automação & Bots</strong>
+            <div class="meta">ChatBots (Baileys, Venom-bot, Telegraf), Puppeteer, Robot.JS</div>
+          </div>
+
+          <div class="job">
+            <strong>Mobile & Low/No Code</strong>
+            <div class="meta">React Native, Bubble.io, FlutterFlow</div>
+          </div>
+
+          <div class="job">
+            <strong>Outros</strong>
+            <div class="meta">C/C++ (algoritmos), C# .NET (básico)</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="education" aria-label="Informações adicionais">
+        <div class="section-title">Informações adicionais</div>
+        <div class="job">
+          <ul>
+            <li>Disponível para trabalhos remotos e presenciais. <!-- fonte: PDF --> </li>
+            <li>Contato: +55 71 98405-6597 • matheusvieira160@gmail.com. <!-- fonte: PDF --> </li>
+          </ul>
+        </div>
+      </section>
+
+      <footer>
+        Conteúdo baseado nos dados do seu currículo em PDF. Se quiser, já aplico mudanças adicionais (cores, layout, export para PDF, botão para baixar CV).
+      </footer>
+    </section>
+  </main>
 </body>
-
 </html>
