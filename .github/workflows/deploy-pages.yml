@@ -1,0 +1,43 @@
+name: Publicar no GitHub Pages
+
+# Cuida das alterações que NÃO vêm de zip: quando você edita um arquivo
+# direto aqui no GitHub, ou quando roda na mão pela aba Actions.
+# O envio de zip é publicado pelo publicar-site.yml, que faz o deploy sozinho.
+on:
+  push:
+    branches: [master, main]
+    paths-ignore: ['*.zip']    # zip é assunto do publicar-site.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true     # vale só a última publicação
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # .git e .github já ficam de fora: a própria ação os exclui.
+      - name: Empacotar o site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v4

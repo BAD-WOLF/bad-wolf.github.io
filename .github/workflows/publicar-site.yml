@@ -1,0 +1,165 @@
+name: Publicar site a partir de um .zip
+
+# Suba um .zip na raiz do repositório e este workflow apaga o conteúdo atual,
+# extrai o zip no lugar, apaga o zip e publica no GitHub Pages.
+on:
+  push:
+    branches: [master, main]   # este repositório usa master; deixo os dois para o mesmo arquivo servir nos dois sites
+    paths: ['*.zip']           # só .zip na raiz; zip dentro de assets/ não dispara
+  workflow_dispatch:           # também dá para rodar na mão, pela aba Actions
+
+concurrency:
+  group: publicar-site
+  cancel-in-progress: false    # dois envios seguidos não se atropelam
+
+jobs:
+  # ---------------------------------------------------------------- 1 de 2
+  publicar:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write          # precisa para commitar o resultado de volta
+    outputs:
+      publicado: ${{ steps.zip.outputs.encontrado }}
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Procurar o .zip na raiz
+        id: zip
+        run: |
+          set -euo pipefail
+          mapfile -t zips < <(find . -maxdepth 1 -type f -name '*.zip' -printf '%f\n' | sort)
+
+          if [ ${#zips[@]} -eq 0 ]; then
+            echo "Nenhum .zip na raiz. Nada a fazer."
+            echo "encontrado=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [ ${#zips[@]} -gt 1 ]; then
+            echo "::error::Há mais de um .zip na raiz (${zips[*]}). Deixe só um e envie de novo."
+            exit 1
+          fi
+
+          echo "Zip encontrado: ${zips[0]}"
+          echo "arquivo=${zips[0]}" >> "$GITHUB_OUTPUT"
+          echo "encontrado=true" >> "$GITHUB_OUTPUT"
+
+      # Extrai e confere ANTES de apagar qualquer coisa:
+      # zip quebrado ou sem index.html não derruba o site que está no ar.
+      - name: Extrair e conferir o conteúdo
+        if: steps.zip.outputs.encontrado == 'true'
+        run: |
+          set -euo pipefail
+          rm -rf "$RUNNER_TEMP/extraido" "$RUNNER_TEMP/conteudo"
+          mkdir -p "$RUNNER_TEMP/extraido"
+
+          unzip -q "${{ steps.zip.outputs.arquivo }}" -d "$RUNNER_TEMP/extraido"
+
+          # Aceita os dois formatos de zip: arquivos soltos na raiz
+          # ou tudo dentro de uma pasta única.
+          shopt -s dotglob nullglob
+          itens=("$RUNNER_TEMP/extraido"/*)
+          if [ ${#itens[@]} -eq 1 ] && [ -d "${itens[0]}" ]; then
+            echo "Zip com pasta única: $(basename "${itens[0]}"). Usando o conteúdo dela."
+            mv "${itens[0]}" "$RUNNER_TEMP/conteudo"
+          else
+            mv "$RUNNER_TEMP/extraido" "$RUNNER_TEMP/conteudo"
+          fi
+
+          if [ ! -f "$RUNNER_TEMP/conteudo/index.html" ]; then
+            echo "::error::O zip não tem index.html na raiz. Nada foi apagado."
+            exit 1
+          fi
+
+          # Os workflows NUNCA vêm do zip. O GITHUB_TOKEN não tem permissão para
+          # alterar arquivos em .github/workflows/, e o push falharia com 403.
+          # Se você quiser mudar um workflow, edite direto aqui no GitHub.
+          if [ -d "$RUNNER_TEMP/conteudo/.github" ]; then
+            echo "O zip traz .github/ — ignorando, os workflows do repositório são mantidos."
+            rm -rf "$RUNNER_TEMP/conteudo/.github"
+          fi
+
+          echo "Conteúdo validado:"
+          find "$RUNNER_TEMP/conteudo" -type f | sed "s|$RUNNER_TEMP/conteudo/||" | sort
+
+      - name: Apagar o conteúdo atual e colocar o novo
+        if: steps.zip.outputs.encontrado == 'true'
+        run: |
+          set -euo pipefail
+
+          # Some tudo, inclusive o .zip. Só escapam:
+          #   .git     histórico do repositório
+          #   .github  os workflows (sem isto, eles se apagariam na primeira execução)
+          #   CNAME    domínio próprio, se um dia você configurar
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name '.git' \
+            ! -name '.github' \
+            ! -name 'CNAME' \
+            -exec rm -rf -- {} +
+
+          # copia com -a para levar junto arquivos ocultos, como o .nojekyll
+          cp -a "$RUNNER_TEMP/conteudo"/. .
+
+          echo "Raiz do repositório agora:"
+          ls -A
+
+      - name: Commitar
+        if: steps.zip.outputs.encontrado == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "O zip trouxe exatamente o que já estava no ar. Nada a commitar."
+          else
+            git commit -m "site: publica o conteúdo de ${{ steps.zip.outputs.arquivo }}"
+            git push origin "HEAD:${{ github.ref_name }}"
+          fi
+
+          {
+            echo "### Site atualizado"
+            echo ""
+            echo "Origem: \`${{ steps.zip.outputs.arquivo }}\` (apagado depois de extraído)"
+            echo ""
+            echo "Arquivos no ar:"
+            echo ""
+            git ls-files | sed 's/^/- /'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # ---------------------------------------------------------------- 2 de 2
+  # Job separado porque um commit feito pelo GITHUB_TOKEN não dispara outros
+  # workflows: se o deploy não acontecesse aqui, o deploy-pages.yml nunca rodaria
+  # depois de um envio de zip.
+  paginas:
+    needs: publicar
+    if: needs.publicar.outputs.publicado == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Baixar o repositório já atualizado
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Preparar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Empacotar o site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar
+        id: deploy
+        uses: actions/deploy-pages@v4
